@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,23 +60,31 @@ namespace Lab2
 
 
 
-        private bool CalculateIsAdult()
+        public static bool ValidateBirthDate(DateTime birthDate)
         {
-            if (DateTime.Today < _birthDate)
+            if (birthDate > DateTime.Today)
             {
-                MessageBox.Show("Invalid birth date.");
+                MessageBox.Show("Invalid age: The person does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            int age = DateTime.Today.Year - _birthDate.Year - (DateTime.Today.DayOfYear < _birthDate.DayOfYear ? 1 : 0);
-
+            int age = DateTime.Today.Year - birthDate.Year - (DateTime.Today.DayOfYear < birthDate.DayOfYear ? 1 : 0);
             if (age > 135)
             {
-                MessageBox.Show("The person is over 135 years old. Invalid age.");
+                MessageBox.Show("Invalid age: The person is older than 135 years.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
+            return true;
+        }
+
+
+        private bool CalculateIsAdult()
+        {
+
+            int age = DateTime.Today.Year - _birthDate.Year - (DateTime.Today.DayOfYear < _birthDate.DayOfYear ? 1 : 0);
             return age >= 18;
+
         }
 
 

@@ -44,7 +44,17 @@ public partial class MainWindow : Window
         string email = EmailBox.Text;
         DateTime birthDate = BirthDatePicker.SelectedDate.Value;
 
-        var person = new Person(firstName, lastName, email, birthDate);
+        if (!Person.ValidateBirthDate(birthDate))
+        {
+            ProceedButton.IsEnabled = true;
+            return;
+        }
+
+        var person = await Task.Run(() =>
+        {
+            return new Person(firstName, lastName, email, birthDate);
+        });
+
 
         TextBlockFisrtName.Text = person.FirstName;
         TextBlockLastName.Text = person.LastName;
@@ -54,14 +64,11 @@ public partial class MainWindow : Window
         TextBlockChineseZodiac.Text = person.ChineseSign;
         TextBlockSunSign.Text = person.SunSign;
         TextBlockIsBirthdayToday.Text = person.IsBirthday ? "Yes" : "No";
-        if (birthDate.Day == DateTime.Today.Day && birthDate.Month == DateTime.Today.Month)
-        {
-            TextBlockWishes.Text = "Happy birthday!";
-        }
-        else
-        {
-            TextBlockWishes.Text = "";
-        }
+        TextBlockWishes.Text = person.IsBirthday ? "Happy birthday!" : "";
+
+
+        ProceedButton.IsEnabled = true;
+
     }
     private void ExitApplication(object sender, RoutedEventArgs e)
     {

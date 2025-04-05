@@ -31,7 +31,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Text="Astrological Calculator" 
-            HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Foreground="#044345" Margin="15"/>
+            HorizontalAlignment="Center" FontSize="30" FontWeight="Bold" Margin="15"/>
 
         <!-- Left text hint -->
         <TextBlock Text="First name:" VerticalAlignment="Center" FontSize="16" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Margin="5"/>
