@@ -58,8 +58,6 @@ namespace Lab2
             _birthDate = DateTime.MinValue;
         }
 
-
-
         public static bool ValidateBirthDate(DateTime birthDate)
         {
             if (birthDate > DateTime.Today)
@@ -78,6 +76,17 @@ namespace Lab2
             return true;
         }
 
+        public static bool ValidateEmail(string email) //checking email input
+        {
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(email, pattern))
+            {
+                MessageBox.Show("Invalid email: The email address is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            return true;
+        }
+
 
         private bool CalculateIsAdult()
         {
@@ -92,6 +101,7 @@ namespace Lab2
         {
             return _birthDate.Day == DateTime.Today.Day && _birthDate.Month == DateTime.Today.Month;
         }
+
 
         private string GetWesternZodiacSign() //zodiak sign
         {

@@ -44,7 +44,7 @@ public partial class MainWindow : Window
         string email = EmailBox.Text;
         DateTime birthDate = BirthDatePicker.SelectedDate.Value;
 
-        if (!Person.ValidateBirthDate(birthDate))
+        if (!Person.ValidateBirthDate(birthDate) || !Person.ValidateEmail(email))
         {
             ProceedButton.IsEnabled = true;
             return;
@@ -75,4 +75,3 @@ public partial class MainWindow : Window
         Close();
     }
 }
-       
