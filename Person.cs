@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -76,10 +77,11 @@ namespace Lab2
             return true;
         }
 
-        public static bool ValidateEmail(string email) //checking email input
+        public static bool ValidateEmail(string email) //email validation
         {
-            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            if (!Regex.IsMatch(email, pattern))
+            var emailAddress = new EmailAddressAttribute();
+
+            if (!emailAddress.IsValid(email))
             {
                 MessageBox.Show("Invalid email: The email address is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
