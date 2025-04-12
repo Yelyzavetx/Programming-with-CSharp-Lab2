@@ -44,32 +44,50 @@ public partial class MainWindow : Window
         string email = EmailBox.Text;
         DateTime birthDate = BirthDatePicker.SelectedDate.Value;
 
-        if (!Person.ValidateBirthDate(birthDate) || !Person.ValidateEmail(email))
+        try
+        {
+            
+            Person.ValidateEmail(email);
+            Person.ValidateBirthDate(birthDate);
+
+            var person = await Task.Run(() =>
+            {
+                return new Person(firstName, lastName, email, birthDate);
+            });
+
+            
+            TextBlockFisrtName.Text = person.FirstName;
+            TextBlockLastName.Text = person.LastName;
+            TextBlockEmail.Text = person.Email;
+            TextBlockBirthdayDate.Text = person.BirthDate.ToString("dd.MM.yyyy");
+            TextBlockIsAdult.Text = person.IsAdult ? "Yes" : "No";
+            TextBlockChineseZodiac.Text = person.ChineseSign;
+            TextBlockSunSign.Text = person.SunSign;
+            TextBlockIsBirthdayToday.Text = person.IsBirthday ? "Yes" : "No";
+            TextBlockWishes.Text = person.IsBirthday ? "Happy birthday!" : "";
+        }
+        catch (InvalidEmailException ex)
+        {
+            MessageBox.Show(ex.Message, "Invalid Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        catch (FutureBirthDateException ex)
+        {
+            MessageBox.Show(ex.Message, "Future Birth Date", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        catch (TooOldPersonException ex)
+        {
+            MessageBox.Show(ex.Message, "Unrealistic Age", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
         {
             ProceedButton.IsEnabled = true;
-            return;
         }
-
-        var person = await Task.Run(() =>
-        {
-            return new Person(firstName, lastName, email, birthDate);
-        });
-
-
-        TextBlockFisrtName.Text = person.FirstName;
-        TextBlockLastName.Text = person.LastName;
-        TextBlockEmail.Text = person.Email;
-        TextBlockBirthdayDate.Text = person.BirthDate.ToString("dd.MM.yyyy");
-        TextBlockIsAdult.Text = person.IsAdult ? "Yes" : "No";
-        TextBlockChineseZodiac.Text = person.ChineseSign;
-        TextBlockSunSign.Text = person.SunSign;
-        TextBlockIsBirthdayToday.Text = person.IsBirthday ? "Yes" : "No";
-        TextBlockWishes.Text = person.IsBirthday ? "Happy birthday!" : "";
-
-
-        ProceedButton.IsEnabled = true;
-
     }
+
     private void ExitApplication(object sender, RoutedEventArgs e)
     {
         Close();

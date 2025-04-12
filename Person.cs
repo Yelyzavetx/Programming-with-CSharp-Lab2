@@ -11,6 +11,24 @@ using System.Xml.Linq;
 
 namespace Lab2
 {
+    public class FutureBirthDateException : Exception
+    {
+        public FutureBirthDateException()
+            : base("Invalid age: The person does not exist. Birth date in the future") { }
+    }
+
+    public class TooOldPersonException : Exception
+    {
+        public TooOldPersonException()
+            : base("Invalid age: The person is older than 135 years") { }
+    }
+
+    public class InvalidEmailException : Exception
+    {
+        public InvalidEmailException(string email)
+            : base($"Invalid email address: {email}") { }
+    }
+
     class Person
     {
         private string _firstName;
@@ -59,34 +77,29 @@ namespace Lab2
             _birthDate = DateTime.MinValue;
         }
 
-        public static bool ValidateBirthDate(DateTime birthDate)
+        public static void ValidateBirthDate(DateTime birthDate) //Birth date check
         {
             if (birthDate > DateTime.Today)
             {
-                MessageBox.Show("Invalid age: The person does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+                throw new FutureBirthDateException();
             }
 
             int age = DateTime.Today.Year - birthDate.Year - (DateTime.Today.DayOfYear < birthDate.DayOfYear ? 1 : 0);
             if (age > 135)
             {
-                MessageBox.Show("Invalid age: The person is older than 135 years.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+                throw new TooOldPersonException();
             }
-
-            return true;
         }
 
-        public static bool ValidateEmail(string email) //email validation
+
+        public static void ValidateEmail(string email) //email check
         {
             var emailAddress = new EmailAddressAttribute();
 
             if (!emailAddress.IsValid(email))
             {
-                MessageBox.Show("Invalid email: The email address is not valid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+                throw new InvalidEmailException(email);
             }
-            return true;
         }
 
 
